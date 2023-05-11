@@ -20,14 +20,18 @@ public class Util {
     private final static String DB_PASS = "red007ph37";
     private final static String DB_NAME = "new_pp1";
     private static SessionFactory sessionFactory;
+    private static Connection connection = null;
     static String connections = "jdbc:mysql://" + DB_HOST + ":" + DB_PORT + "/" + DB_NAME;
 
     public static Connection getConnection() {
         try {
-            return DriverManager.getConnection(connections, DB_USER, DB_PASS);
+            if (connection == null || connection.isClosed()) {
+                connection = DriverManager.getConnection(connections, DB_USER, DB_PASS);
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        return connection;
     }
 
     public static SessionFactory getSessionFactory() {
